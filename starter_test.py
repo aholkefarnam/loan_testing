@@ -12,34 +12,49 @@
 # compare -s and -v when running the tests
 # run coverage tests with python -m pytest --cov
 
+from datetime import date   
 import pytest
-from datetime import date
-from friend import *
+from loan_calculator import Loan, collectLoanDetails
 
-
-### unit tests ###
-def test_calculate_current_age():
-    """
-    GIVEN a user enters the year they were born
-    WHEN that year is passed to this function
-    THEN the user's age is accurately calculated
-    """
+# Unit tests for Loan class
+def test_discount_factor_calculation():
+    loan = Loan(100000, 30, 0.06)
+    loan.calculateDiscountFactor()
     print("\r")  # carriage return
-    print(" -- calculate_current_age unit test")
-    assert (
-        calculate_current_age(2000) == 23
-    )  # STATIC: will change as the years progress
+    print(" -- discount_factor_calculation unit test")
+    assert loan.getDiscountFactor() == pytest.approx(166.7916, rel=1e-2)
 
+def test_loan_payment_calculation():
+    loan = Loan(100000, 30, 0.06)
+    loan.calculateLoanPmt()
+    print("\r")  # carriage return
+    print(" -- loan_payment_calculation unit test")
+    assert loan.getLoanPmt() == pytest.approx(599.55, rel=1e-2)
 
-def test_calculate_current_age():
-    """
-    GIVEN a user enters the year they were born
-    WHEN that year is passed to this function
-    THEN the user's age is accurately calculated
-    """
-    birth_year = 1995
-    today = date.today()
-    expected_age = today.year - birth_year
-    assert (
-        calculate_current_age(birth_year) == expected_age
-    )  # DYNAMIC: calculates the current year
+# Functional tests for collectLoanDetails() function
+def test_collect_loan_details_input():
+    user_input = ['100000', '30', '0.06']
+    monkeypatch.setattr('builtins.input', lambda x: user_input.pop(0))
+    loan = collectLoanDetails()
+    print("\r")  # carriage return
+    print(" -- collect_loan_details functional test")
+    assert loan.loanAmount == 100000
+    assert loan.numberOfPmts == 30 * 12
+    assert loan.annualRate == 0.06
+
+def test_collect_loan_details_invalid_input():
+    user_input = ['abc', '30', '0.06']
+    monkeypatch.setattr('builtins.input', lambda x: user_input.pop(0))
+    with pytest.raises(ValueError):
+        collectLoanDetails()
+
+# Functional test for main() function
+def test_main_output(capsys, monkeypatch):
+    user_input = ['100000', '30', '0.06']
+    monkeypatch.setattr('builtins.input', lambda x: user_input.pop(0))
+    main()
+    captured = capsys.readouterr()
+    print("\r")  # carriage return
+    print(" -- main functional test")
+    assert "Your monthly payment is: $ 599.55" in captured.out
+
