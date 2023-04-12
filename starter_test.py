@@ -14,7 +14,7 @@
 
 from datetime import date   
 import pytest
-from oop_loan_pmt import Loan, collectLoanDetails
+from oop_loan_pmt import Loan, collectLoanDetails, main
 
 
 # Unit tests for Loan class
@@ -46,15 +46,18 @@ def test_collect_loan_details_input(monkeypatch):
 def test_collect_loan_details_invalid_input(monkeypatch):
     user_input = ['abc', '30', '0.06']
     monkeypatch.setattr('builtins.input', lambda x: user_input.pop(0))
+    print("\r")
+    print(" -- invalid_loan_details functional test")
     with pytest.raises(ValueError):
         collectLoanDetails()
 
 # Functional test for main() function
-def test_main_output(capsys, monkeypatch):
-    user_input = ['100000', '30', '0.06']
-    monkeypatch.setattr('builtins.input', lambda x: user_input.pop(0))
-    captured = capsys.readouterr() 
-    print("\r")  # carriage return
-    print(" -- main functional test")
-    assert "Your monthly payment is: $ 599.55" in captured.out
-
+def test_main_output(capsys):
+    # Capture the stdout to check the output
+    loan = Loan(100000, 30, 0.06) # Set up a Loan object with known values
+    loan.calculateLoanPmt()
+   
+    print("\r")
+    print(" -- main functional tesr")
+    expected_output = "Your monthly payment is: $599.55"
+    assert main() == expected_output
