@@ -56,7 +56,7 @@ def main():
     
     loan.calculateLoanPmt() #run the method to calculate the loan payment
     
-    print("Your monthly payment is: ${0:6.2f}".format (loan.getLoanPmt()))
+    print("Your monthly payment is: ${0:6.2f}".format(loan.getLoanPmt()))
     
     
 if __name__ == "__main__":
