@@ -19,6 +19,11 @@ from oop_loan_pmt import Loan, collectLoanDetails, main
 
 # Unit tests for Loan class
 def test_discount_factor_calculation():
+    #
+    #GIVEN a user enters their loan details
+    #WHEN the details are entered correctly
+    #THEN the discount factor is calculated accurately
+    #
     loan = Loan(100000, 30, 0.06)
     loan.calculateDiscountFactor()
     print("\r")  # carriage return
@@ -26,6 +31,11 @@ def test_discount_factor_calculation():
     assert loan.getDiscountFactor() == pytest.approx(166.7916, rel=1e-2)
 
 def test_loan_payment_calculation():
+    #
+    #GIVEN a user enters their loan details
+    #WHEN a user enters their loan details correctly 
+    #THEN the loan payment is accurately calculated
+    #
     loan = Loan(100000, 30, 0.06)
     loan.calculateLoanPmt()
     print("\r")  # carriage return
@@ -34,6 +44,11 @@ def test_loan_payment_calculation():
 
 # Functional tests for collectLoanDetails() function
 def test_collect_loan_details_input(monkeypatch):
+    #
+    #GIVEN a user uses the loan app
+    #WHEN a user enters their loan details correctly
+    #THEN the app will correctly run
+    #
     user_input = ['100000', '30', '0.06']
     monkeypatch.setattr('builtins.input', lambda x: user_input.pop(0))
     loan = collectLoanDetails()
@@ -44,6 +59,11 @@ def test_collect_loan_details_input(monkeypatch):
     assert loan.annualRate == 0.06
 
 def test_collect_loan_details_invalid_input(monkeypatch):
+    #
+    #GIVEN a user uses the loan app
+    #WHEN a user enters their loan details incorrectly
+    #THEN a value error will occur
+    #
     user_input = ['abc', '30', '0.06']
     monkeypatch.setattr('builtins.input', lambda x: user_input.pop(0))
     print("\r")
@@ -53,6 +73,11 @@ def test_collect_loan_details_invalid_input(monkeypatch):
 
 # Functional test for main() function
 def test_main_output(capsys):
+    #
+    #GIVEN a user uses the loan app
+    #WHEN the calculations are made
+    #THEN the app prints an accurate statement
+    #
     # Capture the stdout to check the output
     loan = Loan(100000, 30, 0.06) # Set up a Loan object with known values
     loan.calculateLoanPmt()
